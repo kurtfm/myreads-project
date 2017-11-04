@@ -8,11 +8,12 @@ import * as utils from '../utils/general'
 class BookShelf extends Component {
     static propTypes = {
         books:PropTypes.array.isRequired,
-        shelvesToShow: PropTypes.array.isRequired
+        shelvesToShow: PropTypes.array.isRequired,
+        updated: PropTypes.func.isRequired
     };
     state = {
         query: ''
-    }; 
+    };
     updateQuery = (query) => {
         this.setState({ query: query.trim() })
     };
@@ -53,7 +54,6 @@ class BookShelf extends Component {
         }
 
         const shelves = new buildShelves(showingBooks);
-        console.log(shelves[0])
         return (
 
         <div className="list-books">
@@ -67,7 +67,7 @@ class BookShelf extends Component {
               <h2 className="bookshelf-title">{utils.shelfNameConverter(shelfNames[index])}</h2>
               <div className="bookshelf-books">
               <ol className="books-grid">
-                    <BookList books={shelf} shelfNames={shelfNames} key={index}/>
+                    <BookList updated={this.props.updated} books={shelf} shelfNames={shelfNames} key={index}/>
                 </ol>
               </div>
             </div>
