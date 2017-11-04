@@ -15,8 +15,8 @@ class BooksApp extends React.Component {
 
   updated = ()=>{
     this.setState({books:[]})
-    getAll().then((books) => {
-      this.setState({ books })
+    getAll().then((latestBooks) => {
+      this.setState({ books:latestBooks })
     })
   }
 
