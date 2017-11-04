@@ -10,12 +10,11 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
-    getAll().then((books) => {
-      this.setState({ books })
-    })
+    this.updated()
   }
 
   updated = ()=>{
+    this.setState({books:[]})
     getAll().then((books) => {
       this.setState({ books })
     })
