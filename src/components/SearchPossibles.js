@@ -9,7 +9,6 @@ class SearchPossibles extends Component{
 
     render(){
         const {terms,search} = this.props
-        console.log(terms)
         return (
             <ol className="search-matching-terms">
                 {terms.map((term,index) => (

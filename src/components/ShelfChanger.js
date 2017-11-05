@@ -12,21 +12,25 @@ class ShelfChanger extends Component {
     }
 
     state = {
+        defaultSelection:this.props.defaultSelection
     }
     shelfChangeHandler = (event) =>{
-        this.props.booksApi.update({'id':this.props.bookId},event.target.value)
-            .then(()=>{
-                this.props.updateBooks();
+        const shelf = event.target.value
+        const id = this.props.bookId
+        this.props.booksApi.update({'id':id},shelf)
+            .then((updatedBook)=>{
+                this.setState({defaultSelection:shelf})
+                this.props.updateBooks(id,shelf);
             })
             .catch((err)=>{console.log(`API ERROR: ${err}`)})
 
     }
     render(){
-        const { defaultSelection, shelfNames} = this.props
+        const { shelfNames} = this.props
 
         return (
             <div className="book-shelf-changer">
-                <select value={defaultSelection} onChange={this.shelfChangeHandler} >
+                <select value={this.state.defaultSelection} onChange={this.shelfChangeHandler} >
                     <option value="none" disabled>Move to...</option>
                     {shelfNames.map((shelf,index) =>(
                     <option key={index} value={shelf}>{utils.shelfNameConverter(shelf)}</option>

@@ -21,7 +21,6 @@ class Search extends Component {
     }
 
     searchBooks = (query) => {
-        console.log(query)
         this.setState({query:query})
         this.setState({ possibles:[]})
         if(query.length > 0){
@@ -46,8 +45,16 @@ class Search extends Component {
         }
     }
 
-    updateSearchBooks = ()=>{
-        console.log('updateSearchBooks called')
+    updateSearchBooks = (id,shelf)=>{
+        let updatedBooks = []
+        this.state.books.map((book,index) => {
+            updatedBooks[index] = book
+            updatedBooks[index].shelf = book.id === id ? shelf : book.shelf
+            return false;
+        })
+        console.log(updatedBooks)
+        this.setState({books:updatedBooks})
+        return true
       }
 
     render(){
