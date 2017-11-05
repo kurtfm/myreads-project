@@ -1,73 +1,35 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import escapeRegExp from 'escape-string-regexp'
-import sortBy from 'sort-by'
 import BookList from './BookList'
 import * as utils from '../utils/general'
 
 class BookShelf extends Component {
     static propTypes = {
-        books:PropTypes.array.isRequired,
-        shelvesToShow: PropTypes.array.isRequired,
-        updated: PropTypes.func.isRequired
-    };
-    state = {
-        query: ''
-    };
-    updateQuery = (query) => {
-        this.setState({ query: query.trim() })
-    };
+        shelves:PropTypes.array.isRequired,
+        shelfNames:PropTypes.array.isRequired,
+        updateShelves: PropTypes.func.isRequired,
+        booksApi: PropTypes.object.isRequired
+    }
 
-    clearQuery = () => {
-        this.setState({ query: '' })
-    };
+    state = {
+    }
 
     render(){
-        const { books, shelvesToShow} = this.props
-        const { query } = this.state
+        const {shelves,shelfNames,updateShelves,booksApi} = this.props
 
-        let showingBooks
-        if(query){
-            const match = new RegExp(escapeRegExp(this.state.query), 'i')
-            showingBooks = books.filter((book) => match.test(book.name))
-        }
-        else{
-            showingBooks = books
-        }
-        showingBooks.sort(sortBy('name'))
-
-        let shelfNames = []
-
-        function buildShelves(showingBooks){
-          let shelving = []
-          showingBooks.map((book) => {
-            if(shelvesToShow.indexOf(book.shelf) !== -1 || shelvesToShow.indexOf('all') !== -1){
-              if(shelfNames.indexOf(book.shelf) === -1){
-                shelfNames.push(book.shelf)
-                shelving[shelfNames.indexOf(book.shelf)] = []
-              }
-              shelving[shelfNames.indexOf(book.shelf)].push(book)
-            }
-            return true
-          })
-          return shelving;
-        }
-
-        const shelves = new buildShelves(showingBooks);
         return (
-
         <div className="list-books">
           <div className="list-books-title">
             <h1>MyReads</h1>
           </div>
           <div className="list-books-content">
             <div>
-            {shelves.map((shelf,index) => (
+            {(shelves||[]).map((shelf,index) => (
               <div key={index} className="bookshelf">
               <h2 className="bookshelf-title">{utils.shelfNameConverter(shelfNames[index])}</h2>
               <div className="bookshelf-books">
               <ol className="books-grid">
-                    <BookList updated={this.props.updated} books={shelf} shelfNames={shelfNames} key={index}/>
+                    <BookList updateBooks={updateShelves} books={shelf} shelfNames={shelfNames} booksApi={booksApi} key={index}/>
                 </ol>
               </div>
             </div>

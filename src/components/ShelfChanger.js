@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as utils from '../utils/general'
-import * as booksAPI from '../services/BooksAPI'
 
 class ShelfChanger extends Component {
     static propTypes = {
         defaultSelection:PropTypes.string.isRequired,
         shelfNames: PropTypes.array.isRequired,
         bookId: PropTypes.string.isRequired,
-        updated:PropTypes.func.isRequired
+        updateBooks:PropTypes.func.isRequired,
+        booksApi: PropTypes.object.isRequired
     }
 
     state = {
     }
     shelfChangeHandler = (event) =>{
-        booksAPI.update({'id':this.props.bookId},event.target.value)
+        this.props.booksApi.update({'id':this.props.bookId},event.target.value)
             .then(()=>{
-                this.props.updated();
+                this.props.updateBooks();
             })
             .catch((err)=>{console.log(`API ERROR: ${err}`)})
 

@@ -6,11 +6,11 @@ class BookList extends Component {
     static propTypes = {
         books:PropTypes.array.isRequired,
         shelfNames: PropTypes.array.isRequired,
-        updated:PropTypes.func.isRequired
+        updateBooks:PropTypes.func.isRequired,
+        booksApi: PropTypes.object.isRequired
     };
 
     state = {};
-
     render(){
         const { books, shelfNames} = this.props
 
@@ -18,7 +18,7 @@ class BookList extends Component {
             <ol className="books-grid">
                 {books.map((book,index) => (
                 <li key={index} >
-                    <BookThumb updated={this.props.updated} shelfNames={shelfNames} book={book} />
+                    <BookThumb updateBooks={this.props.updateBooks} shelfNames={shelfNames} booksApi={this.props.booksApi} book={book} />
                 </li>
                 ))}
             </ol>
