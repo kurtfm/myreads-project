@@ -5,7 +5,8 @@ import ShelfChanger from './ShelfChanger'
 class BookThumb extends Component {
     static propTypes = {
         book:PropTypes.object.isRequired,
-        updated:PropTypes.func.isRequired
+        updateBooks:PropTypes.func.isRequired,
+        booksApi: PropTypes.object.isRequired
     };
 
     state = {
@@ -15,6 +16,7 @@ class BookThumb extends Component {
     render(){
         const book = this.state.book
         const shelfNames = this.props.shelfNames
+        const bookShelf = book.shelf || 'none'
 
         return (
             <div className="book">
@@ -28,13 +30,14 @@ class BookThumb extends Component {
                     </div>
                     <ShelfChanger 
                         shelfNames={shelfNames}
-                        defaultSelection={book.shelf}
+                        defaultSelection={bookShelf}
                         bookId={book.id}
-                        updated={this.props.updated}
+                        updateBooks={this.props.updateBooks}
+                        booksApi={this.props.booksApi} 
                     />
                 </div>
                 <div className="book-title">{book.title}</div>
-                {book.authors.map((author,index) => (
+                {(book.authors||[]).map((author,index) => (
                     <div key={index} className="book-authors">{author}</div>
                 ))}
             </div>
