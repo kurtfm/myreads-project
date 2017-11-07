@@ -24,7 +24,7 @@ class Search extends Component {
 
     componentWillReceiveProps(nextProps) {
         if(this.state.searchResults.length > 0){
-            this.updateSearchBooks(this.state.searchResults,nextProps.currentBooks)
+            this.updateSearchResults(this.state.searchResults,nextProps.currentBooks)
         }
     }
 
@@ -36,7 +36,7 @@ class Search extends Component {
             }
             else{
                 this.setState({noResults:false})
-                this.updateSearchBooks(results.sort(sortBy('name')),this.props.currentBooks)
+                this.updateSearchResults(results.sort(sortBy('name')),this.props.currentBooks)
                 this.setupSearchTerms(query)
             }
         })
@@ -46,20 +46,17 @@ class Search extends Component {
         })
     }
 
-    updateSearchBooks = (searchResults,shelfBooks)=>{
-        let updatedBooks = []
-        const searchBooks = searchResults
-        searchBooks.map((searchBook,index) => {
-            updatedBooks[index] = searchBook
-            shelfBooks.map((shelfBook)=>{
-                if(searchBook.id === shelfBook.id){
-                    updatedBooks[index].shelf = shelfBook.shelf
-                }
-                return true
-            })
-            return true
-        })
-        this.setState({searchResults: updatedBooks})
+    updateSearchResults = (searchResults,shelfBooks)=>{
+        shelfBooks.forEach((book)=>{
+            function isSameBook(result){
+                return book.id === result.id
+            }
+            let resultToUpdate = searchResults.findIndex(isSameBook)
+            if(resultToUpdate !== -1){
+                searchResults[resultToUpdate].shelf = book.shelf
+            }
+         })
+        this.setState({searchResults: searchResults})
     }
 
     searchInputHandler = (query)=>{
