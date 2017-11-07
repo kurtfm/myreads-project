@@ -1,39 +1,22 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import './App.css'
-import * as BooksAPI from  '../services/BooksAPI'
 import BookShelf from '../components/BookShelf'
-import Search from '../components/Search'
+import Search from './Search'
+import * as BooksAPI from  '../services/BooksAPI'
 
 class BooksApp extends React.Component {
   state = {
-    shelves:[],
-    shelfNames:[],
-    shelvesToShow:['all']
+    shelfNames: ['currentlyReading','wantToRead','read'],
+    currentBooks: []
   }
-
   componentDidMount() {
-    this.updateShelves()
+    this.getCurrentBooks()
   }
-
-  updateShelves = ()=>{
-    this.setState({shelves:[]})
-    BooksAPI.getAll().then((latestBooks) => {
-      const shelvesToShow = this.state.shelvesToShow
-      let shelfs = []
-      let shelving = []
-        latestBooks.map((book) => {
-          if(shelvesToShow.indexOf(book.shelf) !== -1 || shelvesToShow.indexOf('all') !== -1){
-            if(shelfs.indexOf(book.shelf) === -1){
-              shelfs.push(book.shelf)
-              shelving[shelfs.indexOf(book.shelf)] = []
-            }
-            shelving[shelfs.indexOf(book.shelf)].push(book)
-          }
-          return true
-        })
-      this.setState({ shelves:shelving, shelfNames: shelfs})
-    })
+  getCurrentBooks = ()=>{
+      BooksAPI.getAll().then((latestBooks) => {
+        this.setState({currentBooks:latestBooks})
+      })
   }
 
   render() {
@@ -41,15 +24,18 @@ class BooksApp extends React.Component {
       <div className="App">
       <Route exact path='/' render={() => (
         <BookShelf
-          shelves={this.state.shelves}
           shelfNames={this.state.shelfNames}
-          updateShelves={this.updateShelves}
-          booksApi={BooksAPI}
+          currentBooks={this.state.currentBooks}
+          updateCurrentBooks={this.getCurrentBooks}
         />
       )}/>
 
       <Route path='/search' render={({ history }) => (
-        <Search booksApi={BooksAPI} shelfNames={this.state.shelfNames} />
+        <Search
+          shelfNames={this.state.shelfNames}
+          currentBooks={this.state.currentBooks}
+          updateCurrentBooks={this.getCurrentBooks}
+        />
       )}/>
       </div>
     );

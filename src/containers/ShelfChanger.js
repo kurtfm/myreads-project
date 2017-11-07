@@ -1,30 +1,32 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as utils from '../utils/general'
+import * as BooksAPI from  '../services/BooksAPI'
 
 class ShelfChanger extends Component {
     static propTypes = {
         defaultSelection:PropTypes.string.isRequired,
         shelfNames: PropTypes.array.isRequired,
         bookId: PropTypes.string.isRequired,
-        updateBooks:PropTypes.func.isRequired,
-        booksApi: PropTypes.object.isRequired
+        updateBooks:PropTypes.func.isRequired
     }
 
     state = {
         defaultSelection:this.props.defaultSelection
     }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({defaultSelection:nextProps.defaultSelection})
+    }
+
     shelfChangeHandler = (event) =>{
-        const shelf = event.target.value
-        const id = this.props.bookId
-        this.props.booksApi.update({'id':id},shelf)
-            .then((updatedBook)=>{
-                this.setState({defaultSelection:shelf})
-                this.props.updateBooks(id,shelf);
+        BooksAPI.update({'id':this.props.bookId},event.target.value)
+            .then(()=>{
+                this.props.updateBooks()
             })
             .catch((err)=>{console.log(`API ERROR: ${err}`)})
-
     }
+
     render(){
         const { shelfNames} = this.props
 

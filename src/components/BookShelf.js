@@ -4,44 +4,72 @@ import BookList from './BookList'
 import * as utils from '../utils/general'
 
 class BookShelf extends Component {
-    static propTypes = {
-        shelves:PropTypes.array.isRequired,
-        shelfNames:PropTypes.array.isRequired,
-        updateShelves: PropTypes.func.isRequired,
-        booksApi: PropTypes.object.isRequired
-    }
+  static propTypes = {
+    shelfNames:PropTypes.array.isRequired,
+    currentBooks:PropTypes.array.isRequired,
+    updateCurrentBooks:PropTypes.func.isRequired
+  }
 
-    state = {
-    }
+  state = {
+    shelvesToShow:['all'],
+    shelves: []
+  }
 
-    render(){
-        const {shelves,shelfNames,updateShelves,booksApi} = this.props
+  componentDidMount() {
+    this.buildShelves(this.props.currentBooks,this.state.shelvesToShow)
+  }
 
-        return (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-            <div>
-            {(shelves||[]).map((shelf,index) => (
-              <div key={index} className="bookshelf">
-              <h2 className="bookshelf-title">{utils.shelfNameConverter(shelfNames[index])}</h2>
-              <div className="bookshelf-books">
+  componentWillReceiveProps(nextProps) {
+    this.buildShelves(nextProps.currentBooks,this.state.shelvesToShow)
+  }
+
+  buildShelves = (books,shelvesToShow)=>{
+    const shelfs = this.props.shelfNames
+    let shelving = []
+    books.map((book) => {
+      if(shelvesToShow.indexOf(book.shelf) !== -1 || shelvesToShow.indexOf('all') !== -1){
+        if(!shelving[shelfs.indexOf(book.shelf)]){
+          shelving[shelfs.indexOf(book.shelf)] = []
+        }
+        shelving[shelfs.indexOf(book.shelf)].push(book)
+      }
+      return true
+    })
+    this.setState({ shelves:shelving})
+  }
+
+  render(){
+      const {shelfNames,updateCurrentBooks} = this.props
+      return (
+      <div className="list-books">
+        <div className="list-books-title">
+          <h1>MyReads</h1>
+        </div>
+        <div className="list-books-content">
+          <div>
+          {this.state.shelves.map((shelf,index) => (
+            <div key={index} className="bookshelf">
+            <h2 className="bookshelf-title">{utils.shelfNameConverter(shelfNames[index])}</h2>
+            <div className="bookshelf-books">
               <ol className="books-grid">
-                    <BookList updateBooks={updateShelves} books={shelf} shelfNames={shelfNames} booksApi={booksApi} key={index}/>
-                </ol>
-              </div>
-            </div>
-            ))}
+                <BookList
+                  updateBooks={updateCurrentBooks}
+                  books={shelf} 
+                  shelfNames={shelfNames}
+                  key={index}
+                />
+              </ol>
             </div>
           </div>
-          <div className="open-search">
-            <a href="/search">Add a book</a>
+          ))}
           </div>
         </div>
-      )
-    }
+        <div className="open-search">
+          <a href="/search">Add a book</a>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default BookShelf
