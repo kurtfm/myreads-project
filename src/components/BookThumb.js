@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ShelfChanger from './ShelfChanger'
+import ShelfChanger from '../containers/ShelfChanger'
 
 class BookThumb extends Component {
     static propTypes = {
         book:PropTypes.object.isRequired,
-        updateBooks:PropTypes.func.isRequired,
-        booksApi: PropTypes.object.isRequired
+        updateBooks:PropTypes.func.isRequired
     };
 
     state = {
         book: this.props.book
     }
-
+    componentWillReceiveProps(nextProps) {
+        this.setState({ book: nextProps.book });
+    }
     render(){
         const book = this.state.book
         const shelfNames = this.props.shelfNames
@@ -33,7 +34,6 @@ class BookThumb extends Component {
                         defaultSelection={bookShelf}
                         bookId={book.id}
                         updateBooks={this.props.updateBooks}
-                        booksApi={this.props.booksApi} 
                     />
                 </div>
                 <div className="book-title">{book.title}</div>
