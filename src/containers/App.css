@@ -54,7 +54,7 @@ body, .app {
   height: 50px;
   border-radius: 50%;
   background: #2e7d32;
-  background-image: url('./icons/add.svg');
+  background-image: url('../images/add.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 28px;
@@ -92,7 +92,7 @@ body, .app {
   width: 50px;
   height: 53px;
   background: white;
-  background-image: url('./icons/arrow-back.svg');
+  background-image: url('../images/arrow-back.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 28px;
@@ -102,6 +102,24 @@ body, .app {
 .search-books-results {
   padding: 80px 10px 20px;
 }
+.search-matching-terms{
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+.search-matching-terms button{
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  background:none;
+  color:inherit;
+  border:none;
+  font: inherit;
+  cursor: pointer;
+}
+.search-matching-terms button:hover {
+  border-bottom:1px solid #444; 
+}
 
 /* books grid */
 
@@ -109,7 +127,6 @@ body, .app {
   list-style-type: none;
   padding: 0;
   margin: 0;
-
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -148,7 +165,7 @@ body, .app {
   height: 40px;
   border-radius: 50%;
   background: #60ac5d;
-  background-image: url('./icons/arrow-drop-down.svg');
+  background-image: url('../images/arrow-drop-down.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 20px;
