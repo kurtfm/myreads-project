@@ -102,24 +102,6 @@ body, .app {
 .search-books-results {
   padding: 80px 10px 20px;
 }
-.search-matching-terms{
-  list-style-type: none;
-  display: flex;
-  flex-wrap: wrap;
-}
-.search-matching-terms button{
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  background:none;
-  color:inherit;
-  border:none;
-  font: inherit;
-  cursor: pointer;
-}
-.search-matching-terms button:hover {
-  border-bottom:1px solid #444; 
-}
 
 /* books grid */
 
