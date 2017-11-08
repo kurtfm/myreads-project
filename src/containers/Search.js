@@ -6,7 +6,9 @@ import SearchPossibles from '../components/SearchPossibles'
 import sortBy from 'sort-by'
 import * as utils from '../utils/general'
 import * as BooksAPI from  '../services/BooksAPI'
+
 const validSearchTerms = new utils.validSearchTerms()
+const waitTime = 1000;
 
 class Search extends Component {
     static propTypes = {
@@ -20,6 +22,10 @@ class Search extends Component {
         noResults:false,
         possibles: [],
         searchResults:[]
+    }
+
+    componentWillMount() {
+        this.startTime = null;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -59,15 +65,21 @@ class Search extends Component {
         this.setState({searchResults: searchResults})
     }
 
-    searchInputHandler = (query)=>{
+    searchInputHandler = (inpt)=>{
+        const nowTime = Date.now()
+        const lagOver = (nowTime - this.startTime) > waitTime || inpt.length === 0
+        this.startTime = lagOver ? nowTime : this.startTime
+        let query =  inpt.trim()
         this.setState({query:query})
-        this.clearPossibles()
-        if(query.length > 0){
-            this.searchBooks(query)
-        }
-        else{
-            this.clearBooks()
-            this.setState({noResults:false})
+        if(lagOver){
+            this.clearPossibles()
+            if(query.length > 0){
+                this.searchBooks(query)
+            }
+            else{
+                this.clearBooks()
+                this.setState({noResults:false})
+            }
         }
     }
 
