@@ -8,6 +8,17 @@ body, .app {
   background: white;
 }
 
+.view-title {
+  padding: 10px 0;
+  background: #5a587c;
+  text-align: center;
+}
+.view-title h1 {
+  font-weight: 400;
+  margin: 0;
+  color: white;
+}
+
 /* books general */
 
 .book {
@@ -41,4 +52,16 @@ body, .app {
   padding: 20px 10px 0;
   text-align: center;
   font-size: 0.8em;
+}
+
+.shelf-changer-base{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #8a8baa;
+  background-image: url('../images/arrow-drop-down.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }

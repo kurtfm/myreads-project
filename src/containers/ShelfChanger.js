@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import * as utils from '../utils/general'
+import * as BookUtils from '../services/BookUtils'
 import * as BooksAPI from  '../services/BooksAPI'
 import './ShelfChanger.css'
 
@@ -10,7 +10,7 @@ class ShelfChanger extends Component {
         shelfNames: PropTypes.array.isRequired,
         bookId: PropTypes.string.isRequired,
         updateBooks:PropTypes.func.isRequired,
-        overrideClassName: PropTypes.string
+        customClassName: PropTypes.string
     }
 
     state = {
@@ -26,19 +26,21 @@ class ShelfChanger extends Component {
             .then(()=>{
                 this.props.updateBooks()
             })
-            .catch((err)=>{console.log(`API ERROR: ${err}`)})
+            .catch((err)=>{
+                console.log(`API ERROR: ${err}`)
+            })
     }
 
     render(){
         const { shelfNames} = this.props
-        const shelfChangerClass = this.props.overrideClassName || "book-shelf-changer"
+        const shelfChangerClass = "shelf-changer-base " + (this.props.customClassName || "book-shelf-changer")
 
         return (
             <div className={shelfChangerClass}>
                 <select value={this.state.defaultSelection} onChange={this.shelfChangeHandler} >
                     <option value="none" disabled>Move to...</option>
                     {shelfNames.map((shelf,index) =>(
-                    <option key={index} value={shelf}>{utils.shelfNameConverter(shelf)}</option>
+                    <option key={index} value={shelf}>{BookUtils.shelfNameConverter(shelf)}</option>
                     ))}
                 </select>
             </div>
