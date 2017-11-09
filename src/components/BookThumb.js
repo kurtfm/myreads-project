@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ShelfChanger from '../containers/ShelfChanger'
+import { Link } from 'react-router-dom'
+import './BookThumb.css'
+import placeholderImage from '../images/no-thumbnail-placeholder.svg'
 
 class BookThumb extends Component {
     static propTypes = {
@@ -18,17 +21,16 @@ class BookThumb extends Component {
         const book = this.state.book
         const shelfNames = this.props.shelfNames
         const bookShelf = book.shelf || 'none'
+        const image = typeof book.imageLinks !== 'undefined' && 
+            typeof book.imageLinks.thumbnail  !== 'undefined' ? 
+            book.imageLinks.thumbnail : placeholderImage
 
         return (
             <div className="book">
                 <div className="book-top">
-                    <div className="book-cover"
-                    style={{
-                        width: 128,
-                        height: 193,
-                        backgroundImage: `url(${book.imageLinks.thumbnail})`
-                        }}>
-                    </div>
+                    <Link className="book-cover" to={`/book/${book.id}`}>
+                        <img src={image} alt={book.title||''}/>
+                    </Link>
                     <ShelfChanger 
                         shelfNames={shelfNames}
                         defaultSelection={bookShelf}
@@ -36,7 +38,7 @@ class BookThumb extends Component {
                         updateBooks={this.props.updateBooks}
                     />
                 </div>
-                <div className="book-title">{book.title}</div>
+                <div className="book-title">{book.title||''}</div>
                 {(book.authors||[]).map((author,index) => (
                     <div key={index} className="book-authors">{author}</div>
                 ))}
@@ -45,5 +47,4 @@ class BookThumb extends Component {
 
     }
 }
-
 export default BookThumb

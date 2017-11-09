@@ -4,6 +4,7 @@ import ShelfChanger from '../containers/ShelfChanger'
 import * as BooksAPI from  '../services/BooksAPI'
 import { Link } from 'react-router-dom'
 import './BookView.css'
+import placeholderImage from '../images/no-thumbnail-placeholder.svg'
 
 const bookViewShelfChangerClass = 'book-summary-shelf-changer'
 
@@ -12,7 +13,9 @@ class BookView extends Component {
         shelfNames:PropTypes.array.isRequired,
         currentBooks:PropTypes.array.isRequired
       }
-
+    static contextTypes = {
+        router: PropTypes.object
+    }
     state = {
         book:{},
         getBookAPI:{promiseResolved:false,success:false}
@@ -30,21 +33,30 @@ class BookView extends Component {
           })
       }
 
+
     render(){
         const book = this.state.book
         if(this.state.getBookAPI.success){
             console.log(book)
             const shelfNames = this.props.shelfNames
             const bookShelf = book.shelf || 'none'
+            const image = book.hasOwnProperty('imageLinks') &&
+                book.imageLinks.hasOwnProperty('thumbnail')  ?
+                book.imageLinks.thumbnail : placeholderImage
+
+
             return (
                 <div className="book-view">
-                    <div className="list-books-title">
+                    <div className="view-title">
                         <h1>Book Summary</h1>
                     </div>
-                    <Link className='back-home' to='/'>Back</Link>
+                    <Link className="back-home" to="#" onClick={this.context.router.history.goBack}>Back</Link>
                     <div className="book-summary">
                         <div className="book-summary-title">
-                            <h2>{book.title}</h2>
+                            <h2>{book.title||'<no title available>'}</h2>
+                        </div>
+                        <div className="book-summary-publish-date">
+                            {book.publishedDate||''}
                         </div>
                         <div className="book-summary-authors">
                         {(book.authors||[]).map((author,index) => (
@@ -56,13 +68,13 @@ class BookView extends Component {
                             </span>
                         ))}
                         </div>
-                        <div className="book-description">
+                        <div className="book-summary-description">
                             <div className="book-summary-top">
                                 <div className="book-cover"
                                     style={{
                                         width: 128,
                                         height: 193,
-                                        backgroundImage: `url(${book.imageLinks.thumbnail})`
+                                        backgroundImage: `url(${image})`
                                         }}>
                                 </div>
                                 <ShelfChanger 
@@ -70,10 +82,14 @@ class BookView extends Component {
                                     defaultSelection={bookShelf}
                                     bookId={book.id}
                                     updateBooks={this.getCurrentBook}
-                                    overrideClassName={bookViewShelfChangerClass}
+                                    customClassName={bookViewShelfChangerClass}
                                 />
                             </div>
-                            {book.description}</div>
+                            {book.description || 'Sorry, no summary available.'}
+                            {book.previewLink && (
+                                <span> <a className="book-summary-more-info" href={book.previewLink}>More info at Google Books.</a></span>
+                                )}
+                            </div>
                     </div>
                 </div>
             )

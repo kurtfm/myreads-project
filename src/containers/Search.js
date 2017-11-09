@@ -4,20 +4,22 @@ import { Link } from 'react-router-dom'
 import BookList from '../components/BookList'
 import SearchPossibles from '../components/SearchPossibles'
 import sortBy from 'sort-by'
-import * as utils from '../utils/general'
+import _ from 'lodash'
+import * as BookUtils from '../services/BookUtils'
 import * as BooksAPI from  '../services/BooksAPI'
 import './Search.css'
 
-const validSearchTerms = new utils.validSearchTerms()
-const waitTime = 1000;
+const WAIT_TIME = 1000;
 
 class Search extends Component {
     static propTypes = {
         shelfNames:PropTypes.array.isRequired,
         currentBooks:PropTypes.array.isRequired,
         updateCurrentBooks:PropTypes.func.isRequired
-      }
-
+    }
+    static contextTypes = {
+        router: PropTypes.object
+    }
     state = {
         query: '',
         noResults:false,
@@ -43,7 +45,8 @@ class Search extends Component {
             }
             else{
                 this.setState({noResults:false})
-                this.updateSearchResults(results.sort(sortBy('name')),this.props.currentBooks)
+                this.updateSearchResults(results.sort(sortBy('name')),
+                    this.props.currentBooks)
                 this.setupSearchTerms(query)
             }
         })
@@ -55,10 +58,9 @@ class Search extends Component {
 
     updateSearchResults = (searchResults,shelfBooks)=>{
         shelfBooks.forEach((book)=>{
-            function isSameBook(result){
-                return book.id === result.id
-            }
-            let resultToUpdate = searchResults.findIndex(isSameBook)
+            let resultToUpdate = _.findIndex(searchResults, (result) =>{
+                return result.id === book.id; 
+            })
             if(resultToUpdate !== -1){
                 searchResults[resultToUpdate].shelf = book.shelf
             }
@@ -67,12 +69,9 @@ class Search extends Component {
     }
 
     searchInputHandler = (inpt)=>{
-        const nowTime = Date.now()
-        const lagOver = (nowTime - this.startTime) > waitTime || inpt.length === 0
-        this.startTime = lagOver ? nowTime : this.startTime
         let query =  inpt.trim()
-        this.setState({query:query})
-        if(lagOver){
+        this.setState({query:inpt})
+        if(this.isForcedLagOver){
             this.clearPossibles()
             if(query.length > 0){
                 this.searchBooks(query)
@@ -84,9 +83,16 @@ class Search extends Component {
         }
     }
 
+    isForcedLagOver = ()=>{
+        const timeNow = Date.now()
+        const lagOver = (timeNow - this.startTime) > WAIT_TIME
+        this.startTime = lagOver ? timeNow : this.startTime
+        return lagOver
+    }
+
     setupSearchTerms = (query)=>{
         if(query.length > 1){
-            const terms = validSearchTerms.find(query)
+            const terms = BookUtils.findValidSearchTerms(query)
             this.setState({ possibles:  terms})
         }
     }
@@ -105,13 +111,14 @@ class Search extends Component {
 
     render(){
         let query = this.state.query;
+        console.log(this.state.searchResults)
         return (
         <div className="search-books">
-            <div className="list-books-title">
+            <div className="view-title">
                 <h1>Add Books</h1>
             </div>
             <div className="search-books-bar">
-            <Link className='close-search' to='/'>Close</Link>
+            <Link className='close-search' to="#" onClick={this.context.router.history.goBack}>Close</Link>
               <div className="search-books-input-wrapper">
                 <input
                 type='search'

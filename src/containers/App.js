@@ -1,14 +1,15 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import './App.css'
-import BookShelf from '../components/BookShelf'
+import BookShelf from './BookShelf'
 import Search from './Search'
 import BookView from './BookView'
 import * as BooksAPI from  '../services/BooksAPI'
 
+const SHELF_NAMES = ['currentlyReading','wantToRead','read','none']
+
 class BooksApp extends React.Component {
   state = {
-    shelfNames: ['currentlyReading','wantToRead','read'],
     currentBooks: []
   }
   componentDidMount() {
@@ -26,7 +27,7 @@ class BooksApp extends React.Component {
 
         <Route exact path='/' render={() => (
           <BookShelf
-            shelfNames={this.state.shelfNames}
+            shelfNames={SHELF_NAMES}
             currentBooks={this.state.currentBooks}
             updateCurrentBooks={this.getCurrentBooks}
           />
@@ -34,7 +35,7 @@ class BooksApp extends React.Component {
 
         <Route path='/search' render={({ history }) => (
           <Search
-            shelfNames={this.state.shelfNames}
+            shelfNames={SHELF_NAMES}
             currentBooks={this.state.currentBooks}
             updateCurrentBooks={this.getCurrentBooks}
           />
@@ -43,7 +44,7 @@ class BooksApp extends React.Component {
         <Route path='/book/:id' render={(props,history) => (
           <BookView
             {...props}
-            shelfNames={this.state.shelfNames}
+            shelfNames={SHELF_NAMES}
             currentBooks={this.state.currentBooks}
           />
         )}/>
