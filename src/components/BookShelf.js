@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import BookList from './BookList'
 import * as utils from '../utils/general'
+import './BookShelf.css'
 
 class BookShelf extends Component {
   static propTypes = {
@@ -46,7 +47,6 @@ class BookShelf extends Component {
           <h1>MyReads</h1>
         </div>
         <div className="list-books-content">
-          <div>
           {this.state.shelves.map((shelf,index) => (
             <div key={index} className="bookshelf">
             <h2 className="bookshelf-title">{utils.shelfNameConverter(shelfNames[index])}</h2>
@@ -62,7 +62,6 @@ class BookShelf extends Component {
             </div>
           </div>
           ))}
-          </div>
         </div>
         <div className="open-search">
           <a href="/search">Add a book</a>

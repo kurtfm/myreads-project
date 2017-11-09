@@ -6,6 +6,7 @@ import SearchPossibles from '../components/SearchPossibles'
 import sortBy from 'sort-by'
 import * as utils from '../utils/general'
 import * as BooksAPI from  '../services/BooksAPI'
+import './Search.css'
 
 const validSearchTerms = new utils.validSearchTerms()
 const waitTime = 1000;
@@ -106,20 +107,23 @@ class Search extends Component {
         let query = this.state.query;
         return (
         <div className="search-books">
+            <div className="list-books-title">
+                <h1>Add Books</h1>
+            </div>
             <div className="search-books-bar">
             <Link className='close-search' to='/'>Close</Link>
               <div className="search-books-input-wrapper">
                 <input
                 type='search'
-                placeholder='Search by title or author'
+                placeholder='Search for a book'
                 value={query}
                 onChange={(event) => this.searchInputHandler(event.target.value)} />
               </div>
             </div>
+            {this.state.noResults && (
+                <div className="search-no-results">No Books found matching '{query}'</div>
+            )}
             <div className="search-books-results">
-                {this.state.noResults && (
-                    <div>No Books found matching '{query}'</div>
-                )}
                 {this.state.possibles.length > 0 && (
                     <SearchPossibles terms={this.state.possibles} search={this.searchInputHandler} />
                 )}
