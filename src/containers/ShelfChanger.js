@@ -22,9 +22,11 @@ class ShelfChanger extends Component {
     }
 
     shelfChangeHandler = (event) =>{
-        BooksAPI.update({'id':this.props.bookId},event.target.value)
+        let shelfValue = event.target.value
+        BooksAPI.update({'id':this.props.bookId},shelfValue)
             .then(()=>{
-                this.props.updateBooks()
+                this.setState({defaultSelection:shelfValue})
+                this.props.updateBooks(this.props.bookId,shelfValue)
             })
             .catch((err)=>{
                 console.log(`API ERROR: ${err}`)
@@ -38,7 +40,7 @@ class ShelfChanger extends Component {
         return (
             <div className={shelfChangerClass}>
                 <select value={this.state.defaultSelection} onChange={this.shelfChangeHandler} >
-                    <option value="none" disabled>Move to...</option>
+                    <option disabled>Move to...</option>
                     {shelfNames.map((shelf,index) =>(
                     <option key={index} value={shelf}>{BookUtils.shelfNameConverter(shelf)}</option>
                     ))}

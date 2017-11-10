@@ -59,7 +59,7 @@ class Search extends Component {
     updateSearchResults = (searchResults,shelfBooks)=>{
         shelfBooks.forEach((book)=>{
             let resultToUpdate = _.findIndex(searchResults, (result) =>{
-                return result.id === book.id; 
+                return result.id === book.id;
             })
             if(resultToUpdate !== -1){
                 searchResults[resultToUpdate].shelf = book.shelf
@@ -97,6 +97,20 @@ class Search extends Component {
         }
     }
 
+    handleShelfChange = (bookId,shelfName)=>{
+        if(shelfName === 'none'){
+            let bookToUpdate = _.findIndex(this.state.searchResults, (book) =>{
+                return bookId === book.id
+            })
+            if(bookToUpdate !== -1){
+                let updatedSearchResults = this.state.searchResults
+                updatedSearchResults[bookToUpdate].shelf = shelfName
+                this.setState({searchResults: updatedSearchResults})
+            }
+            this.props.updateCurrentBooks()
+        }
+    }
+
     clearBooks = () => {
         this.setState({searchResults:[]})
     }
@@ -111,7 +125,6 @@ class Search extends Component {
 
     render(){
         let query = this.state.query;
-        console.log(this.state.searchResults)
         return (
         <div className="search-books">
             <div className="view-title">
@@ -135,7 +148,7 @@ class Search extends Component {
                     <SearchPossibles terms={this.state.possibles} search={this.searchInputHandler} />
                 )}
                 {this.state.searchResults.length > 0 && (
-                    <BookList books={this.state.searchResults} shelfNames={this.props.shelfNames} updateBooks={this.props.updateCurrentBooks} />
+                    <BookList books={this.state.searchResults} shelfNames={this.props.shelfNames} updateBooks={this.handleShelfChange} />
 
                 )}
             </div>
