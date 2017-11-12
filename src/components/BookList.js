@@ -6,7 +6,8 @@ class BookList extends Component {
     static propTypes = {
         books:PropTypes.array.isRequired,
         shelfNames: PropTypes.array.isRequired,
-        updateBooks:PropTypes.func.isRequired
+        updateBooks:PropTypes.func.isRequired,
+        setupSearchReturnUrl:PropTypes.func
     }
 
     state = {
@@ -22,7 +23,7 @@ class BookList extends Component {
             <ol className="books-grid">
                 {this.state.books.map((book,index) => (
                 <li key={index} >
-                    <BookThumb updateBooks={this.props.updateBooks} shelfNames={shelfNames} book={book} />
+                    <BookThumb setupSearchReturnUrl={this.props.setupSearchReturnUrl} updateBooks={this.props.updateBooks} shelfNames={shelfNames} book={book} />
                 </li>
                 ))}
             </ol>

@@ -21,7 +21,9 @@ class BookView extends Component {
         getBookAPI:{promiseResolved:false,success:false}
     }
     componentDidMount() {
-        this.getCurrentBook()
+        if(this.props.match && this.props.match.params && this.props.match.params.id){
+            this.getCurrentBook()
+        }
       }
       getCurrentBook = ()=>{
           BooksAPI.get(this.props.match.params.id)
