@@ -1,6 +1,6 @@
 # MyReads Project
 
-This project was created and submitted as the first project in the Udacity React Nanodegree.  The project extends the base style and BooksAPI.js given as a base.
+This project was created and submitted as the first project in the Udacity React Nanodegree.  The project extends the base style and BooksAPI.js to complete the requirements.
 
 ## Run Project Locally
 
@@ -19,7 +19,7 @@ Start development server
 npm start
 ```
 
-The default browser should open to http://localhost:3000/ and show the main page of my project.
+The default browser should open to http://localhost:3000/ and show the main page of the project.
 
 ## Requirements / Features
 The overall requirement for the project:
@@ -46,7 +46,10 @@ endpoint: http://localhost:3000/search
 The book may be added to the shelf using the same method as on the shelf page.  Once added the new shelf value will be reflected in the current (and future) search results.  This update will also be reflected on the main view. Each book will also support the ability for the user to click on the image and see a preview page.
 
 - As the user inputs values a besides the search a keyword lookup will occur.  If keyword matches are found they will be displayed below the search input.  The user can choose to click on the keyword and get the results matching the  keyword.
+
 - The back button will work in the browser to return the user back to their last view. Also, there is a back arrow which will return the user to their previous view.
+
+- The search view can also take the search query as a path param which allows the current search to be injected into the users route history before leaving to the book view so that when they return the search results will still be there
 
 ### Summary view
 endpoint: http://localhost:3000/book/:id
