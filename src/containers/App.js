@@ -24,7 +24,6 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="App">
-
         <Route exact path='/' render={() => (
           <BookShelf
             shelfNames={SHELF_NAMES}
@@ -32,15 +31,14 @@ class BooksApp extends React.Component {
             updateCurrentBooks={this.getCurrentBooks}
           />
         )}/>
-
-        <Route path='/search' render={({ history }) => (
+        <Route path='/search/:term?' render={(props,history) => (
           <Search
+            {...props}
             shelfNames={SHELF_NAMES}
             currentBooks={this.state.currentBooks}
             updateCurrentBooks={this.getCurrentBooks}
           />
         )}/>
-
         <Route path='/book/:id' render={(props,history) => (
           <BookView
             {...props}

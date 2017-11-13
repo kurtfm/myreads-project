@@ -1,21 +1,29 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ShelfChanger from '../containers/ShelfChanger'
-import { Link } from 'react-router-dom'
 import './BookThumb.css'
 import placeholderImage from '../images/no-thumbnail-placeholder.svg'
+import { Link } from 'react-router-dom'
 
 class BookThumb extends Component {
     static propTypes = {
         book:PropTypes.object.isRequired,
-        updateBooks:PropTypes.func.isRequired
-    };
-
+        updateBooks:PropTypes.func.isRequired,
+        setupSearchReturnUrl:PropTypes.func
+    }
+    static contextTypes = {
+        router: PropTypes.object
+    }
     state = {
         book: this.props.book
     }
     componentWillReceiveProps(nextProps) {
         this.setState({ book: nextProps.book });
+    }
+    setSearchContext = ()=>{
+        if(this.props.setupSearchReturnUrl){
+            this.props.setupSearchReturnUrl()
+        }
     }
     render(){
         const book = this.state.book
@@ -28,7 +36,7 @@ class BookThumb extends Component {
         return (
             <div className="book">
                 <div className="book-top">
-                    <Link className="book-cover" to={`/book/${book.id}`}>
+                    <Link className="book-cover" onClick={this.setSearchContext} to={`/book/${book.id}`}>
                         <img src={image} alt={book.title||''}/>
                     </Link>
                     <ShelfChanger 

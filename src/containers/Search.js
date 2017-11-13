@@ -30,6 +30,12 @@ class Search extends Component {
     componentWillMount() {
         this.startTime = null;
     }
+    componentDidMount() {
+        if(this.props.match && this.props.match.params && this.props.match.params.term){
+            this.searchInputHandler(this.props.match.params.term)
+        }
+      }
+
 
     componentWillReceiveProps(nextProps) {
         if(this.state.searchResults.length > 0){
@@ -79,6 +85,7 @@ class Search extends Component {
             else{
                 this.clearBooks()
                 this.setState({noResults:false})
+                this.clearSearchPath()
             }
         }
     }
@@ -97,6 +104,15 @@ class Search extends Component {
         }
     }
 
+    setSearchPath = (term) => {
+        this.context.router.history.push(`/search/${term}`);
+    }
+    clearSearchPath = (term) => {
+        this.context.router.history.push(`/search/`);
+    }
+    setupSearchReturnUrl = () => {
+        this.setSearchPath(this.state.query)
+    }
     handleShelfChange = (bookId,shelfName)=>{
         if(shelfName === 'none'){
             let bookToUpdate = _.findIndex(this.state.searchResults, (book) =>{
@@ -148,7 +164,7 @@ class Search extends Component {
                     <SearchPossibles terms={this.state.possibles} search={this.searchInputHandler} />
                 )}
                 {this.state.searchResults.length > 0 && (
-                    <BookList books={this.state.searchResults} shelfNames={this.props.shelfNames} updateBooks={this.handleShelfChange} />
+                    <BookList setupSearchReturnUrl={this.setupSearchReturnUrl} books={this.state.searchResults} shelfNames={this.props.shelfNames} updateBooks={this.handleShelfChange} />
 
                 )}
             </div>
