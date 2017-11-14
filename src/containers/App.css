@@ -65,3 +65,11 @@ body, .app {
   background-size: 20px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
+
+/* 404 */
+.missing-view{
+  width: 400px;
+  height: 100px;
+  padding: 20px;
+  margin: auto;
+}
