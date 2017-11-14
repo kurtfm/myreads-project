@@ -15,6 +15,10 @@ class BooksApp extends React.Component {
   componentDidMount() {
     this.getCurrentBooks()
   }
+
+  /**
+  * @description call books API to get all the current books in user shelves and set them in state
+  */
   getCurrentBooks = ()=>{
       BooksAPI.getAll().then((latestBooks) => {
         this.setState({currentBooks:latestBooks})

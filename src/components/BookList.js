@@ -13,17 +13,23 @@ class BookList extends Component {
     state = {
         books:this.props.books
     }
+
     componentWillReceiveProps(nextProps) {
-        this.setState({ books: nextProps.books });
+        this.setState({ books: nextProps.books })
     }
+
     render(){
         const {shelfNames} = this.props
-
         return (
             <ol className="books-grid">
                 {this.state.books.map((book,index) => (
                 <li key={index} >
-                    <BookThumb setupSearchReturnUrl={this.props.setupSearchReturnUrl} updateBooks={this.props.updateBooks} shelfNames={shelfNames} book={book} />
+                    <BookThumb
+                        setupSearchReturnUrl={this.props.setupSearchReturnUrl}
+                        updateBooks={this.props.updateBooks} 
+                        shelfNames={shelfNames} 
+                        book={book}
+                    />
                 </li>
                 ))}
             </ol>

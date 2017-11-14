@@ -11,20 +11,28 @@ class BookThumb extends Component {
         updateBooks:PropTypes.func.isRequired,
         setupSearchReturnUrl:PropTypes.func
     }
+
     static contextTypes = {
         router: PropTypes.object
     }
+
     state = {
         book: this.props.book
     }
+
     componentWillReceiveProps(nextProps) {
         this.setState({ book: nextProps.book });
     }
+    
+    /**
+    * @description Pass through setup for search context if present
+    */
     setSearchContext = ()=>{
         if(this.props.setupSearchReturnUrl){
             this.props.setupSearchReturnUrl()
         }
     }
+
     render(){
         const book = this.state.book
         const shelfNames = this.props.shelfNames

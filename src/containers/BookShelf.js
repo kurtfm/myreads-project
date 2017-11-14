@@ -12,7 +12,6 @@ class BookShelf extends Component {
   }
 
   state = {
-    shelvesToShow:['all'],
     shelves: []
   }
 
@@ -24,16 +23,18 @@ class BookShelf extends Component {
     this.buildShelves(nextProps.currentBooks,this.state.shelvesToShow)
   }
 
-  buildShelves = (books,shelvesToShow)=>{
+  /**
+  * @description group books into separate arrays for each shelf
+  * @param {array} books - current user books
+  */
+  buildShelves = (books)=>{
     const shelfs = this.props.shelfNames
     let shelving = []
     books.map((book) => {
-      if(shelvesToShow.indexOf(book.shelf) !== -1 || shelvesToShow.indexOf('all') !== -1){
-        if(!shelving[shelfs.indexOf(book.shelf)]){
-          shelving[shelfs.indexOf(book.shelf)] = []
-        }
-        shelving[shelfs.indexOf(book.shelf)].push(book)
+      if(!shelving[shelfs.indexOf(book.shelf)]){
+        shelving[shelfs.indexOf(book.shelf)] = []
       }
+      shelving[shelfs.indexOf(book.shelf)].push(book)
       return true
     })
     this.setState({ shelves:shelving})
