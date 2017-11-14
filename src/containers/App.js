@@ -6,7 +6,7 @@ import Search from './Search'
 import BookView from './BookView'
 import * as BooksAPI from  '../services/BooksAPI'
 
-const SHELF_NAMES = ['currentlyReading','wantToRead','read','none']
+const SHELF_NAMES = ['currentlyReading','wantToRead','read','remove']
 
 class BooksApp extends React.Component {
   state = {
