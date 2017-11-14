@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import './SearchPossibles.css'
 
 class SearchPossibles extends Component{
+
     static PropTypes = {
         terms: PropTypes.array.isRequired,
         search: PropTypes.func.isRequired

@@ -15,6 +15,10 @@ class BooksApp extends React.Component {
   componentDidMount() {
     this.getCurrentBooks()
   }
+
+  /**
+  * @description call books API to get all the current books in user shelves and set them in state
+  */
   getCurrentBooks = ()=>{
       BooksAPI.getAll().then((latestBooks) => {
         this.setState({currentBooks:latestBooks})
@@ -24,7 +28,6 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="App">
-
         <Route exact path='/' render={() => (
           <BookShelf
             shelfNames={SHELF_NAMES}
@@ -32,15 +35,14 @@ class BooksApp extends React.Component {
             updateCurrentBooks={this.getCurrentBooks}
           />
         )}/>
-
-        <Route path='/search' render={({ history }) => (
+        <Route path='/search/:term?' render={(props,history) => (
           <Search
+            {...props}
             shelfNames={SHELF_NAMES}
             currentBooks={this.state.currentBooks}
             updateCurrentBooks={this.getCurrentBooks}
           />
         )}/>
-
         <Route path='/book/:id' render={(props,history) => (
           <BookView
             {...props}

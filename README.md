@@ -1,93 +1,62 @@
 # MyReads Project
 
-This is the starter template for the final assessment project for Udacity's React Fundamentals course. The goal of this template is to save you time by providing a static example of the CSS and HTML markup that may be used, but without any of the React code that is needed to complete the project. If you choose to start with this template, your job will be to add interactivity to the app by refactoring the static code in this template.
+This project was created and submitted as the first project in the Udacity React Nanodegree.  The project extends the base style and BooksAPI.js to complete the requirements.
 
-Of course, you are free to start this project from scratch if you wish! Just be sure to use [Create React App](https://github.com/facebookincubator/create-react-app) to bootstrap the project.
+## Run Project Locally
 
-## TL;DR
-
-To get started developing right away:
-
-* install all project dependencies with `npm install`
-* start the development server with `npm start`
-
-## What You're Getting
+Clone this repo.
 ```bash
-├── CONTRIBUTING.md
-├── README.md - This file.
-├── SEARCH_TERMS.md # The whitelisted short collection of available search terms for you to use with your app.
-├── package.json # npm package manager file. It's unlikely that you'll need to modify this.
-├── public
-│   ├── favicon.ico # React Icon, You may change if you wish.
-│   └── index.html # DO NOT MODIFY
-└── src
-    ├── App.css # Styles for your app. Feel free to customize this as you desire.
-    ├── App.js # This is the root of your app. Contains static HTML right now.
-    ├── App.test.js # Used for testing. Provided with Create React App. Testing is encouraged, but not required.
-    ├── BooksAPI.js # A JavaScript API for the provided Udacity backend. Instructions for the methods are below.
-    ├── icons # Helpful images for your app. Use at your discretion.
-    │   ├── add.svg
-    │   ├── arrow-back.svg
-    │   └── arrow-drop-down.svg
-    ├── index.css # Global styles. You probably won't need to change anything here.
-    └── index.js # You should not need to modify this file. It is used for DOM rendering only.
+git clone https://github.com/kurtfm/myreads-project.git
 ```
 
-Remember that good React design practice is to create new JS files for each component and use import/require statements to include them where they are needed.
-
-## Backend Server
-
-To simplify your development process, we've provided a backend server for you to develop against. The provided file [`BooksAPI.js`](src/BooksAPI.js) contains the methods you will need to perform necessary operations on the backend:
-
-* [`getAll`](#getall)
-* [`update`](#update)
-* [`search`](#search)
-
-### `getAll`
-
-Method Signature:
-
-```js
-getAll()
+Change directory into the project and install requirements.
+```bash
+npm install
 ```
 
-* Returns a Promise which resolves to a JSON object containing a collection of book objects.
-* This collection represents the books currently in the bookshelves in your app.
-
-### `update`
-
-Method Signature:
-
-```js
-update(book, shelf)
+Start development server
+```bash
+npm start
 ```
 
-* book: `<Object>` containing at minimum an `id` attribute
-* shelf: `<String>` contains one of ["wantToRead", "currentlyReading", "read"]  
-* Returns a Promise which resolves to a JSON object containing the response data of the POST request
+The default browser should open to http://localhost:3000/ and show the main page of the project.
 
-### `search`
+## Requirements / Features
+The overall requirement for the project:
+> In the MyReads project, you'll create a bookshelf app that allows you to select and categorize books you have read, are currently reading, or want to read. The project emphasizes using React to build the application and provides an API server and client library that you will use to persist information as you interact with the application.
 
-Method Signature:
+### Main view
+endpoint: http://localhost:3000/
 
-```js
-search(query, maxResults)
-```
+- This view will show three 'shelfs' that can hold books that the user is either currently reading, would like to read or has read.
+- The books can be moved from shelf to shelf or removed from the shelves entirely.
 
-* query: `<String>`
-* maxResults: `<Integer>` Due to the nature of the backend server, search results are capped at 20, even if this is set higher.
-* Returns a Promise which resolves to a JSON object containing a collection of book objects.
-* These books do not know which shelf they are on. They are raw results only. You'll need to make sure that books have the correct state while on the search page.
+- Each book has a title, author list and thumbnail image. The user can reach a summary view by clicking on the image.
 
-## Important
-The backend API uses a fixed set of cached search results and is limited to a particular set of search terms, which can be found in [SEARCH_TERMS.md](SEARCH_TERMS.md). That list of terms are the _only_ terms that will work with the backend, so don't be surprised if your searches for Basket Weaving or Bubble Wrap don't come back with any results.
+- The view will show a plus icon on the right side that when invoked will lead the user to the search view.
 
-## Create React App
+### Search view
+endpoint: http://localhost:3000/search
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). You can find more information on how to perform common tasks [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+- This view allows the user to find additional books based on key word searches.  
 
-## Contributing
+- The input field at the top allows the user to enter text to search for a book.  As text is entered matching results will be displayed.
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
+- Each book displayed will have a similar view to the books on the main page with a title, author list, and thumbnail image.
+The book may be added to the shelf using the same method as on the shelf page.  Once added the new shelf value will be reflected in the current (and future) search results.  This update will also be reflected on the main view. Each book will also support the ability for the user to click on the image and see a preview page.
 
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+- As the user inputs values a besides the search a keyword lookup will occur.  If keyword matches are found they will be displayed below the search input.  The user can choose to click on the keyword and get the results matching the  keyword.
+
+- The back button will work in the browser to return the user back to their last view. Also, there is a back arrow which will return the user to their previous view.
+
+- The search view can also take the search query as a path param which allows the current search to be injected into the users route history before leaving to the book view so that when they return the search results will still be there
+
+### Summary view
+endpoint: http://localhost:3000/book/:id
+(example: http://localhost:3000/book/nggnmAEACAAJ)
+
+- The summary view will pull the book details for the book id passed on the path.
+- A title, publish date and author list will be displayed along with a description of the book.
+- Like the other views a thumbnail image and drop down to change the shelf of the book will be shown.
+- If available a more info link to Google Books will be provided at the end of the description
+- The back button will work in the browser to return the user back to their last view. Also, there is a back arrow which will return the user to their previous view.

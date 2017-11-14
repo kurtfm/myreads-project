@@ -13,16 +13,25 @@ class BookView extends Component {
         shelfNames:PropTypes.array.isRequired,
         currentBooks:PropTypes.array.isRequired
       }
+
     static contextTypes = {
         router: PropTypes.object
     }
+
     state = {
         book:{},
         getBookAPI:{promiseResolved:false,success:false}
     }
+
     componentDidMount() {
-        this.getCurrentBook()
+        if(this.props.match && this.props.match.params && this.props.match.params.id){
+            this.getCurrentBook()
+        }
       }
+
+    /**
+    * @description use book id from props to call books api to get the book details
+    */
       getCurrentBook = ()=>{
           BooksAPI.get(this.props.match.params.id)
           .then((latestBook) => {
@@ -33,11 +42,9 @@ class BookView extends Component {
           })
       }
 
-
     render(){
         const book = this.state.book
         if(this.state.getBookAPI.success){
-            console.log(book)
             const shelfNames = this.props.shelfNames
             const bookShelf = book.shelf || 'none'
             const image = book.hasOwnProperty('imageLinks') &&
@@ -111,5 +118,4 @@ class BookView extends Component {
 
     }
 }
-
 export default BookView

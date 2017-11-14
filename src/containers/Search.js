@@ -17,9 +17,11 @@ class Search extends Component {
         currentBooks:PropTypes.array.isRequired,
         updateCurrentBooks:PropTypes.func.isRequired
     }
+
     static contextTypes = {
         router: PropTypes.object
     }
+
     state = {
         query: '',
         noResults:false,
@@ -30,13 +32,21 @@ class Search extends Component {
     componentWillMount() {
         this.startTime = null;
     }
-
+    componentDidMount() {
+        if(this.props.match && this.props.match.params && this.props.match.params.term){
+            this.searchInputHandler(this.props.match.params.term)
+        }
+    }
     componentWillReceiveProps(nextProps) {
         if(this.state.searchResults.length > 0){
             this.updateSearchResults(this.state.searchResults,nextProps.currentBooks)
         }
     }
 
+    /**
+    * @description Call Search API with query
+    * @param {string} query - The search query
+    */
     searchBooks = (query) => {
         BooksAPI.search(query).then((results) => {
             if(results.error){
@@ -56,6 +66,11 @@ class Search extends Component {
         })
     }
 
+    /**
+    * @description update the search results with shelf state
+    * @param {array} searchResults - results returned from a search
+    * @param {array} shelfBooks - the current list of books in the shelves
+    */
     updateSearchResults = (searchResults,shelfBooks)=>{
         shelfBooks.forEach((book)=>{
             let resultToUpdate = _.findIndex(searchResults, (result) =>{
@@ -68,6 +83,10 @@ class Search extends Component {
         this.setState({searchResults: searchResults})
     }
 
+    /**
+    * @description Handle user input on the search form field
+    * @param {string} inpt - The user's input
+    */
     searchInputHandler = (inpt)=>{
         let query =  inpt.trim()
         this.setState({query:inpt})
@@ -79,10 +98,14 @@ class Search extends Component {
             else{
                 this.clearBooks()
                 this.setState({noResults:false})
+                this.clearSearchPath()
             }
         }
     }
 
+    /**
+    * @description compare start time with current time to determine if forced lag is over
+    */
     isForcedLagOver = ()=>{
         const timeNow = Date.now()
         const lagOver = (timeNow - this.startTime) > WAIT_TIME
@@ -90,6 +113,10 @@ class Search extends Component {
         return lagOver
     }
 
+    /**
+    * @description check search query against valid search terms and set in state
+    * @param {string} query - The search query
+    */
     setupSearchTerms = (query)=>{
         if(query.length > 1){
             const terms = BookUtils.findValidSearchTerms(query)
@@ -97,6 +124,33 @@ class Search extends Component {
         }
     }
 
+    /**
+    * @description set the search path
+    * @param {term} query - The search query
+    */
+    setSearchPath = (term) => {
+        this.context.router.history.push(`/search/${term}`)
+    }
+
+    /**
+    * @description clear the search path
+    */
+    clearSearchPath = (term) => {
+        this.context.router.history.push(`/search/`)
+    }
+
+    /**
+    * @description handler for setting the current search query in the path
+    */
+    setupSearchReturnUrl = () => {
+        this.setSearchPath(this.state.query)
+    }
+
+    /**
+    * @description handle the user event to change a shelf
+    * @param {string} bookId - the book id that is changing shelf
+    * @param {string} shelfName - the name of the shelf to move the book into
+    */
     handleShelfChange = (bookId,shelfName)=>{
         if(shelfName === 'none'){
             let bookToUpdate = _.findIndex(this.state.searchResults, (book) =>{
@@ -111,14 +165,23 @@ class Search extends Component {
         }
     }
 
+    /**
+    * @description clear the search results from state
+    */
     clearBooks = () => {
         this.setState({searchResults:[]})
     }
 
+    /**
+    * @description set the noResults to true in state
+    */
     noResults = () => {
         this.setState({noResults:true})
     }
 
+    /**
+    * @description clear the possible search term matches from state
+    */
     clearPossibles = () => {
         this.setState({possibles:[]})
     }
@@ -131,7 +194,7 @@ class Search extends Component {
                 <h1>Add Books</h1>
             </div>
             <div className="search-books-bar">
-            <Link className='close-search' to="#" onClick={this.context.router.history.goBack}>Close</Link>
+            <Link className='close-search' to="/">Close</Link>
               <div className="search-books-input-wrapper">
                 <input
                 type='search'
@@ -148,7 +211,7 @@ class Search extends Component {
                     <SearchPossibles terms={this.state.possibles} search={this.searchInputHandler} />
                 )}
                 {this.state.searchResults.length > 0 && (
-                    <BookList books={this.state.searchResults} shelfNames={this.props.shelfNames} updateBooks={this.handleShelfChange} />
+                    <BookList setupSearchReturnUrl={this.setupSearchReturnUrl} books={this.state.searchResults} shelfNames={this.props.shelfNames} updateBooks={this.handleShelfChange} />
 
                 )}
             </div>

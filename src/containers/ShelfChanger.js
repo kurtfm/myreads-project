@@ -21,6 +21,10 @@ class ShelfChanger extends Component {
         this.setState({defaultSelection:nextProps.defaultSelection})
     }
 
+    /**
+    * @description handle user selection of shelf change
+    * @param {string} event - dom event on select
+    */
     shelfChangeHandler = (event) =>{
         let shelfValue = event.target.value
         BooksAPI.update({'id':this.props.bookId},shelfValue)

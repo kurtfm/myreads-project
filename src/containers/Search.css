@@ -10,7 +10,7 @@
   }
   .search-books-input-wrapper {
     flex: 1;
-    background: #e9e;
+    background: #ee99ee;
   }
   .search-books-bar input {
     width: 100%;
@@ -19,7 +19,7 @@
     border: none;
     outline: none;
   }
-  
+
   .close-search {
     display: block;
     top: 20px;
@@ -33,7 +33,7 @@
     background-size: 28px;
     font-size: 0;
   }
-  
+
   .search-books-results {
     padding: 80px 10px 20px;
   }
