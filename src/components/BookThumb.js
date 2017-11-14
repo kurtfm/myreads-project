@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ShelfChanger from '../containers/ShelfChanger'
+import ShelfChanger from './ShelfChanger'
 import './BookThumb.css'
 import placeholderImage from '../images/no-thumbnail-placeholder.svg'
 import { Link } from 'react-router-dom'
@@ -23,7 +23,7 @@ class BookThumb extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState({ book: nextProps.book });
     }
-    
+
     /**
     * @description Pass through setup for search context if present
     */

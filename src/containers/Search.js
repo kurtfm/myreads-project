@@ -161,8 +161,8 @@ class Search extends Component {
                 updatedSearchResults[bookToUpdate].shelf = shelfName
                 this.setState({searchResults: updatedSearchResults})
             }
-            this.props.updateCurrentBooks()
         }
+        this.props.updateCurrentBooks()
     }
 
     /**
