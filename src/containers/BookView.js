@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ShelfChanger from '../containers/ShelfChanger'
+import ShelfChanger from '../components/ShelfChanger'
 import * as BooksAPI from  '../services/BooksAPI'
 import { Link } from 'react-router-dom'
 import './BookView.css'
